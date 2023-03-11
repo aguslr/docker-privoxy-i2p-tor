@@ -5,6 +5,7 @@ FROM docker.io/${BASE_IMAGE}
 RUN \
   apk add --update --no-cache privoxy i2pd tor supervisor curl \
   && rm -rf /var/cache/apk/* && \
+  (cd /etc/privoxy && for i in *.new; do mv "${i}" "${i%.*}"; done) && \
   mkdir -p /var/log/supervisord /var/run/supervisord /supervisor.d
 
 COPY config/privoxy.cfg /etc/privoxy/config
