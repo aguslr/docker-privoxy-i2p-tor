@@ -47,11 +47,11 @@ Using a *SOCKSv5* proxy is preferred as it provides added security.
 To create more *Tor* instances, we can mount additional files with this command:
 
     docker run -p 8118:8118 -p 4444:4444 -p 9050:9050 \
-      -v "${PWD}/supervisor.conf:/supervisor.d/tor.conf \
+      -v "${PWD}/tor.ini:/etc/supervisor.d/tor.ini \
       -v "${PWD}/instances:/etc/tor/instances \
       docker.io/aguslr/privoxy-i2p-tor:latest
 
-An example for `supervisor.conf`:
+An example for `tor.ini`:
 
     [program:tor1]
     stdout_logfile=/dev/stdout
