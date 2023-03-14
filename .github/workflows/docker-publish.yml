@@ -87,6 +87,7 @@ jobs:
           labels: |
             org.opencontainers.image.base.name=docker.io/${{ env.IMAGE_BASE }}
           tags: |
+            type=sha
             type=schedule,pattern={{date 'YYYYMMDD'}}
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
@@ -104,6 +105,7 @@ jobs:
           labels: |
             org.opencontainers.image.base.name=docker.io/${{ env.IMAGE_BASE }}
           tags: |
+            type=sha
             type=ref,event=pr
 
       - name: Set up QEMU
