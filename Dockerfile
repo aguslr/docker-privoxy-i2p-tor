@@ -1,4 +1,4 @@
-ARG BASE_IMAGE=alpine:latest
+ARG BASE_IMAGE=library/alpine:latest
 
 FROM docker.io/${BASE_IMAGE}
 
