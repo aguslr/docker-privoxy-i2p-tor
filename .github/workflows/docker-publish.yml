@@ -9,12 +9,14 @@ on:
     paths-ignore:
       - '.git*'
       - 'docker-compose.yml'
+      - 'README.*'
   push:
     branches:
       - main
     paths-ignore:
       - '.git*'
       - 'docker-compose.yml'
+      - 'README.*'
   workflow_dispatch:
 
 env:
@@ -126,11 +128,3 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-
-      - name: Update repo description
-        uses: peter-evans/dockerhub-description@v3
-        with:
-          username: ${{ env.DOCKER_USERNAME }}
-          password: ${{ env.DOCKER_PASSWORD }}
-          repository: ${{ env.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}
-          short-description: ${{ github.event.repository.description }}
