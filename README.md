@@ -1,7 +1,7 @@
 [aguslr/docker-privoxy-i2p-tor][1]
 ==========================
 
-[![publish-docker-image](https://github.com/aguslr/docker-privoxy-i2p-tor/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/aguslr/docker-privoxy-i2p-tor/actions/workflows/docker-publish.yml) [![docker-pulls](https://img.shields.io/docker/pulls/aguslr/privoxy-i2p-tor)](https://hub.docker.com/r/aguslr/privoxy-i2p-tor) [![image-size](https://img.shields.io/docker/image-size/aguslr/privoxy-i2p-tor/latest)](https://hub.docker.com/r/aguslr/privoxy-i2p-tor)
+[![docker-pulls](https://img.shields.io/docker/pulls/aguslr/privoxy-i2p-tor)](https://hub.docker.com/r/aguslr/privoxy-i2p-tor) [![image-size](https://img.shields.io/docker/image-size/aguslr/privoxy-i2p-tor/latest)](https://hub.docker.com/r/aguslr/privoxy-i2p-tor)
 
 
 This *Docker* image sets up *Privoxy* to be used as a proxy that can redirect
