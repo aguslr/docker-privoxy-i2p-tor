@@ -22,8 +22,9 @@ on:
 env:
   IMAGE_BASE: library/alpine:latest
   REPO_NAME: ${{ github.event.repository.name }}
-  DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-  DOCKER_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+  REGISTRY_URL: docker.io
+  REGISTRY_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+  REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
 
 jobs:
 
@@ -49,7 +50,7 @@ jobs:
         uses: lucacome/docker-image-update-checker@v1.2.0
         with:
           base-image: ${{ env.IMAGE_BASE }}
-          image: ${{ env.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}
+          image: ${{ env.REGISTRY_USERNAME }}/${{ env.IMAGE_NAME }}
         if: github.event_name == 'schedule'
 
   build:
@@ -69,13 +70,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Log into Docker Hub registry
+      - name: Log into registry
         if: github.event_name != 'pull_request'
         uses: docker/login-action@v2
         with:
-          registry: docker.io
-          username: ${{ env.DOCKER_USERNAME }}
-          password: ${{ env.DOCKER_PASSWORD }}
+          registry: ${{ env.REGISTRY_URL }}
+          username: ${{ env.REGISTRY_USERNAME }}
+          password: ${{ env.REGISTRY_PASSWORD }}
 
       - name: Extract Docker metadata
         if: github.event_name != 'pull_request'
@@ -83,7 +84,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: |
-            docker.io/${{ env.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_USERNAME }}/${{ env.IMAGE_NAME }}
           flavor: |
             latest=false
           labels: |
@@ -101,11 +102,9 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: |
-            docker.io/${{ env.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_USERNAME }}/${{ env.IMAGE_NAME }}
           flavor: |
             latest=false
-          labels: |
-            org.opencontainers.image.base.name=docker.io/${{ env.IMAGE_BASE }}
           tags: |
             type=sha
             type=ref,event=pr

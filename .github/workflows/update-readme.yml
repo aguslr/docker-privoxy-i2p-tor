@@ -10,8 +10,9 @@ on:
 
 env:
   REPO_NAME: ${{ github.event.repository.name }}
-  DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-  DOCKER_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+  REGISTRY_URL: docker.io
+  REGISTRY_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+  REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
 
 jobs:
 
@@ -35,18 +36,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Log into Docker Hub registry
+      - name: Log into registry
         if: github.event_name != 'pull_request'
         uses: docker/login-action@v2
         with:
-          registry: docker.io
-          username: ${{ env.DOCKER_USERNAME }}
-          password: ${{ env.DOCKER_PASSWORD }}
+          registry: ${{ env.REGISTRY_URL }}
+          username: ${{ env.REGISTRY_USERNAME }}
+          password: ${{ env.REGISTRY_PASSWORD }}
 
       - name: Update repo description
         uses: peter-evans/dockerhub-description@v3
         with:
-          username: ${{ env.DOCKER_USERNAME }}
-          password: ${{ env.DOCKER_PASSWORD }}
-          repository: ${{ env.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}
+          username: ${{ env.REGISTRY_USERNAME }}
+          password: ${{ env.REGISTRY_PASSWORD }}
+          repository: ${{ env.REGISTRY_USERNAME }}/${{ env.IMAGE_NAME }}
           short-description: ${{ github.event.repository.description }}
