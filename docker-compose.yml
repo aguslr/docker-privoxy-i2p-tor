@@ -9,7 +9,3 @@ services:
       - 8118:8118/tcp
       - 4444:4444/tcp
       - 9050:9050/tcp
-    healthcheck:
-      test: timeout 2 curl -sfo /dev/null --proxy 127.0.0.1:8118 -L 'http://config.privoxy.org/'
-      interval: 5m
-      timeout: 5s
