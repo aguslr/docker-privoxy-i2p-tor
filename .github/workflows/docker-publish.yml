@@ -22,9 +22,15 @@ on:
 env:
   IMAGE_BASE: library/alpine:latest
   REPO_NAME: ${{ github.event.repository.name }}
-  REGISTRY_URL: docker.io
-  REGISTRY_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-  REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+  REGISTRY_URL: ${{ github.event_name != 'pull_request' &&
+                    'docker.io' ||
+                    'ghcr.io' }}
+  REGISTRY_USERNAME: ${{ github.event_name != 'pull_request' &&
+                         secrets.DOCKERHUB_USERNAME ||
+                         github.repository_owner }}
+  REGISTRY_PASSWORD: ${{ github.event_name != 'pull_request' &&
+                         secrets.DOCKERHUB_PASSWORD ||
+                         secrets.GITHUB_TOKEN }}
 
 jobs:
 
@@ -34,6 +40,7 @@ jobs:
       image_name: ${{ steps.split.outputs.image_name }}
     steps:
       - name: Set name of image
+        if: github.event_name != 'pull_request'
         id: split
         run: echo "image_name=${REPO_NAME#*-}" >> $GITHUB_OUTPUT
 
@@ -65,13 +72,14 @@ jobs:
       needs.check.outputs.image-needs-updating == 'true'
 
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Log into registry
-        if: github.event_name != 'pull_request'
         uses: docker/login-action@v2
         with:
           registry: ${{ env.REGISTRY_URL }}
@@ -102,7 +110,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: |
-            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_USERNAME }}/${{ env.IMAGE_NAME }}
+            ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_USERNAME }}/${{ env.REPO_NAME }}
           flavor: |
             latest=false
           tags: |
@@ -126,6 +134,8 @@ jobs:
           build-args: |
             BASE_IMAGE=${{ env.IMAGE_BASE }}
           platforms: linux/386, linux/amd64, linux/arm64
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
+          push: true
+          tags: |
+            ${{ steps.meta.outputs.tags }}
+            ${{ steps.meta_pr.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
