@@ -20,7 +20,7 @@ on:
   workflow_dispatch:
 
 env:
-  IMAGE_BASE: library/alpine:latest
+  IMAGE_BASE: library/debian:stable-slim
   REPO_NAME: ${{ github.event.repository.name }}
   REGISTRY_URL: ${{ github.event_name != 'pull_request' &&
                     'docker.io' ||

@@ -1,11 +1,13 @@
-ARG BASE_IMAGE=library/alpine:latest
+ARG BASE_IMAGE=library/debian:stable-slim
 
 FROM docker.io/${BASE_IMAGE}
 
 RUN \
-  apk add --update --no-cache privoxy i2pd tor supervisor curl \
-  && rm -rf /var/cache/apk/* && \
-  (cd /etc/privoxy && for i in *.new; do mv "${i}" "${i%.*}"; done) && \
+  apt-get update && \
+  env DEBIAN_FRONTEND=noninteractive \
+  apt-get install -y --no-install-recommends privoxy i2pd tor supervisor curl \
+  -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" \
+  && apt-get clean && rm -rf /var/lib/apt/lists/* /var/lib/apt/lists/* && \
   mkdir -p /var/log/supervisord /var/run/supervisord /etc/supervisor.d
 
 COPY config/privoxy.cfg /etc/privoxy/config
