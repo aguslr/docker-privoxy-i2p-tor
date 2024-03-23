@@ -10,10 +10,7 @@ RUN \
   && apt-get clean && rm -rf /var/lib/apt/lists/* /var/lib/apt/lists/* && \
   mkdir -p /var/log/supervisord /var/run/supervisord /etc/supervisor.d
 
-COPY config/privoxy.cfg /etc/privoxy/config
-COPY config/i2pd.conf /etc/i2p/i2pd.conf
-COPY config/torrc /etc/tor/torrc
-COPY config/supervisord.conf /etc/supervisord.conf
+COPY rootfs/ /
 
 EXPOSE 8118/tcp 4444/tcp 9050/tcp
 
