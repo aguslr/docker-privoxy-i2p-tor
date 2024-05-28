@@ -2,7 +2,7 @@ ARG BASE_IMAGE=library/debian:stable-slim
 
 FROM docker.io/${BASE_IMAGE}
 
-RUN <<-EOT bash
+RUN <<-EOT sh
 	set -eu
 
 	apt-get update
