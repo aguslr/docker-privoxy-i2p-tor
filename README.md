@@ -29,13 +29,13 @@ To use *Privoxy-I2P-Tor* for improved privacy, follow these steps:
 
 1. Clone and start the container:
 
-       docker run -p 8118:8118 -p 4444:4444 -p 9050:9050 \
+       docker run -p 8118:8118 -p 4447:4447 -p 9050:9050 \
          docker.io/aguslr/privoxy-i2p-tor:latest
 
 2. Change your [Web browser's proxy settings][5] to point to the appropriate
    proxy. Here we have 3 routing options:
     1. All traffic through *Tor*: use *SOCKSv5* proxy with `127.0.0.1:9050`.
-    2. All traffic through *I2P*: use *HTTP* proxy with `127.0.0.1:4444`.
+    2. All traffic through *I2P*: use *SOCKSv5* proxy with `127.0.0.1:4447`.
     3. Only *[.i2p][6]* sites through *I2P*, *[.onion][7]* sites through *Tor*:
        use *HTTP* proxy with `127.0.0.1:8118`.
 
@@ -46,7 +46,7 @@ Using a *SOCKSv5* proxy is preferred as it provides added security.
 
 To create more *Tor* instances, we can mount additional files with this command:
 
-    docker run -p 8118:8118 -p 4444:4444 -p 9050:9050 \
+    docker run -p 8118:8118 -p 4447:4447 -p 9050:9050 \
       -v "${PWD}/tor.ini:/etc/supervisor.d/tor.ini \
       -v "${PWD}/instances:/etc/tor/instances \
       docker.io/aguslr/privoxy-i2p-tor:latest
